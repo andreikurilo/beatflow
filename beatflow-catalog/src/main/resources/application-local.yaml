@@ -4,3 +4,8 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
+
+app:
+  cors:
+    allowed-origins:
+      - http://localhost:5173

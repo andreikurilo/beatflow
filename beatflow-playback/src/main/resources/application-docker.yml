@@ -13,3 +13,6 @@ minio:
 
 app:
   public-base-url: https://beatflow.akurilo.com
+  cors:
+    allowedOrigins:
+      - https://beatflow.akurilo.com

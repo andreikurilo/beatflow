@@ -4,3 +4,8 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
+
+app:
+  cors:
+    allowedOrigins:
+      - https://beatflow.akurilo.com

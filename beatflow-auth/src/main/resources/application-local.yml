@@ -8,3 +8,6 @@ spring:
 app:
   cookies:
     secure: false
+  cors:
+    allowedOrigins:
+      - http://localhost:5173

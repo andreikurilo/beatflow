@@ -7,3 +7,6 @@ spring:
 
 app:
   public-base-url: http://localhost:8183
+  cors:
+    allowed-origins:
+      - http://localhost:5173

@@ -22,7 +22,4 @@ jwt:
   secret: ${JWT_SECRET:super-secret-key-super-secret-key-123456}
   access-token-expiration-ms: 900000
 
-app:
-  cors:
-    allowedOrigins:
-      - http://localhost:5173
+

@@ -8,3 +8,6 @@ spring:
 app:
   cookies:
     secure: true
+  cors:
+    allowedOrigins:
+      - https://beatflow.akurilo.com
