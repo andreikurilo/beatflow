@@ -1,0 +1,4 @@
+app:
+  cors:
+    allowedOrigins:
+      - http://localhost:5173

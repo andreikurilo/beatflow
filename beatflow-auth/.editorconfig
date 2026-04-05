@@ -1,0 +1,27 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+
+[*.java]
+indent_style = space
+indent_size = 4
+tab_width = 4
+max_line_length = 120
+
+ij_java_keep_simple_methods_in_one_line = false
+ij_java_keep_simple_blocks_in_one_line = false
+ij_java_keep_simple_lambdas_in_one_line = false
+
+ij_java_method_call_chain_wrap = on_every_item
+ij_java_align_multiline_chained_methods = true
+
+ij_java_call_parameters_wrap = on_every_item
+ij_java_align_multiline_parameters = true
+ij_java_align_multiline_parameters_in_calls = true
+
+ij_java_method_parameters_wrap = on_every_item
+ij_java_lambda_brace_style = end_of_line
+ij_java_brace_style = end_of_line

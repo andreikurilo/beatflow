@@ -1,0 +1,116 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: beatflow-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:7
+    container_name: beatflow-redis
+    ports:
+      - "6379:6379"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    container_name: beatflow-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: beatflow-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: beatflow-kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "8085:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: beatflow
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+
+  minio:
+    image: minio/minio:latest
+    container_name: beatflow-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+  playback:
+    build:
+      context: .
+      dockerfile: ./beatflow-playback/Dockerfile
+    container_name: beatflow-playback
+    depends_on:
+      - postgres
+      - catalog
+      - minio
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: super-secret-key-super-secret-key-123456
+      INTERNAL_API_KEY: dev-internal-key
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+      MINIO_BUCKET: beatflow-audio
+    ports:
+      - "9183:8183"
+  auth:
+    build:
+      context: .
+      dockerfile: ./beatflow-auth/Dockerfile
+    container_name: beatflow-auth
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: super-secret-key-super-secret-key-123456
+    ports:
+      - "8181:8181"
+
+  catalog:
+    build:
+      context: .
+      dockerfile: ./beatflow-catalog/Dockerfile
+    container_name: beatflow-catalog
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      INTERNAL_API_KEY: dev-internal-key
+      JWT_SECRET: super-secret-key-super-secret-key-123456
+    ports:
+      - "8182:8182"
+
+volumes:
+  postgres_data:
+  minio_data:

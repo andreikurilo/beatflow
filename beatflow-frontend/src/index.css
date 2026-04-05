@@ -1,0 +1,187 @@
+/* ========================
+   ROOT THEME
+======================== */
+
+:root {
+  --bg: #0b0f19;
+  --bg-soft: #111827;
+  --bg-elevated: #1f2937;
+
+  --text: #e5e7eb;
+  --text-muted: #9ca3af;
+
+  --border: rgba(255, 255, 255, 0.08);
+
+  --accent: #22c55e;
+  --accent-hover: #16a34a;
+
+  --danger: #ef4444;
+
+  --radius: 12px;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    sans-serif;
+  line-height: 1.5;
+
+  color: var(--text);
+  background: var(--bg);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================
+   RESET (FIXED)
+======================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+/* ========================
+   ROOT LAYOUT
+======================== */
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================
+   TYPOGRAPHY
+======================== */
+
+h1 {
+  font-size: 32px;
+  font-weight: 600;
+  color: white;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+p {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ========================
+   INPUTS
+======================== */
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+
+  background: var(--bg-soft);
+  color: white;
+
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+input::placeholder {
+  color: var(--text-muted);
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+/* ========================
+   BUTTONS
+======================== */
+
+button {
+  padding: 12px;
+  border-radius: var(--radius);
+  border: none;
+
+  background: var(--accent);
+  color: black;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: var(--accent-hover);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ========================
+   LINKS
+======================== */
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ========================
+   UTILITIES (VERY USEFUL)
+======================== */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+/* ========================
+   SCROLLBAR (nice touch)
+======================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-elevated);
+  border-radius: 8px;
+}

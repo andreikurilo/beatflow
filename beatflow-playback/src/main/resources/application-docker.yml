@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/beatflow_playback
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+
+catalog:
+  base-url: http://catalog:8182
+
+minio:
+  url: http://minio:9000
