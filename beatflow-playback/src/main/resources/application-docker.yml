@@ -10,3 +10,6 @@ catalog:
 
 minio:
   url: http://minio:9000
+
+app:
+  public-base-url: https://beatflow.akurilo.com

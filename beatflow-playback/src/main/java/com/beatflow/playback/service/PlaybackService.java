@@ -24,8 +24,9 @@ public class PlaybackService {
     private final CatalogClient catalogClient;
     private final JwtTokenService jwtTokenService;
 
-    @Value("${server.port}")
-    private int serverPort;
+
+    @Value("${app.public-base-url}")
+    private String publicBaseUrl;
 
     public StartPlaybackResponse startPlayback(String bearerToken, UUID trackId, String deviceId) {
         UUID userId = extractUserId(bearerToken);
@@ -53,7 +54,7 @@ public class PlaybackService {
 
         playbackSessionRepository.save(session);
 
-        String streamUrl = "http://localhost:" + serverPort + "/api/playback/streams/" + session.getId();
+        String streamUrl = publicBaseUrl + "/api/playback/streams/" + session.getId();
 
         return new StartPlaybackResponse(session.getId(), streamUrl);
     }
