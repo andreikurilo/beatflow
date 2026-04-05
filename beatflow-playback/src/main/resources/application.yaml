@@ -25,8 +25,8 @@ catalog:
 
 minio:
   url: ${MINIO_URL:http://localhost:9000}
-  access-key: ${MINIO_ACCESS_KEY:minio}
-  secret-key: ${MINIO_SECRET_KEY:minio123}
+  access-key: ${MINIO_ROOT_USER:minio}
+  secret-key: ${MINIO_ROOT_PASSWORD:minio123}
   bucket: ${MINIO_BUCKET:beatflow-audio}
 
 server:
