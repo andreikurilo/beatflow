@@ -123,6 +123,7 @@ services:
       - postgres
       - kafka
     environment:
+      JWT_SECRET: ${JWT_SECRET:-super-secret-key-super-secret-key-123456}
       SPRING_PROFILES_ACTIVE: docker
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
