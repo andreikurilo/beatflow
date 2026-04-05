@@ -9,7 +9,7 @@ export type StartPlaybackResponse = {
 export async function startPlayback(
   trackId: string,
 ): Promise<StartPlaybackResponse> {
-  const response = await playbackClient.post(`/api/playback/start/${trackId}`);
+  const response = await playbackClient.post(`/start/${trackId}`);
 
   return response.data;
 }

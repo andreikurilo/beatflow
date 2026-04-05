@@ -12,6 +12,6 @@ export interface Track {
 }
 
 export async function getTracks(): Promise<Track[]> {
-  const res = await catalogClient.get("/api/tracks");
+  const res = await catalogClient.get("");
   return res.data;
 }
