@@ -1,11 +1,17 @@
 spring:
   datasource:
-    url: jdbc:postgresql://postgres:5432/beatflow_catalog
+    url: jdbc:postgresql://postgres:5432/beatflow_analytics
     driver-class-name: org.postgresql.Driver
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
 
+  kafka:
+    bootstrap-servers: kafka:29092
+    consumer:
+      group-id: beatflow-analytics-v2
+
 app:
+  public-base-url: https://beatflow.akurilo.com
   cors:
     allowedOrigins:
       - https://beatflow.akurilo.com

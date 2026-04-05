@@ -1,4 +1,4 @@
-package com.beatflow.playback.config;
+package com.beatflow.analytics.config;
 
 import com.beatflow.common.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http,
-                                                      JwtAuthenticationFilter jwtAuthenticationFilter) {
+                                                      JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         return http.securityMatcher("/api/**")
                    .cors(cors -> {
                    })
@@ -29,7 +29,7 @@ public class SecurityConfig {
                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                    .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
                                                       .permitAll()
-                                                      .requestMatchers(HttpMethod.GET, "/api/playback/streams/**")
+                                                      .requestMatchers("/api/analytics/ping")
                                                       .permitAll()
                                                       .anyRequest()
                                                       .authenticated())

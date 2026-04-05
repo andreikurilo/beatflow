@@ -1,4 +1,7 @@
 spring:
+  kafka:
+    bootstrap-servers: kafka:29092
+
   datasource:
     url: jdbc:postgresql://postgres:5432/beatflow_playback
     driver-class-name: org.postgresql.Driver
@@ -12,7 +15,9 @@ minio:
   url: http://minio:9000
 
 app:
-  public-base-url: https://beatflow.akurilo.com
+  public-base-url: ${APP_PUBLIC_BASE_URL:http://localhost:8183}
   cors:
     allowedOrigins:
       - https://beatflow.akurilo.com
+      - http://localhost:3000
+      - http://localhost:5173

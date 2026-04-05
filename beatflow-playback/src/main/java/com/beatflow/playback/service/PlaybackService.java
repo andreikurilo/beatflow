@@ -1,5 +1,6 @@
 package com.beatflow.playback.service;
 
+import com.beatflow.common.kafka.event.TrackPlaybackStartedEvent;
 import com.beatflow.common.security.JwtTokenService;
 import com.beatflow.playback.client.CatalogClient;
 import com.beatflow.playback.domain.PlaybackSession;
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class PlaybackService {
 
     private final PlaybackSessionRepository playbackSessionRepository;
+    private final PlaybackAnalyticsProducer playbackAnalyticsProducer;
     private final CatalogClient catalogClient;
     private final JwtTokenService jwtTokenService;
 
@@ -53,6 +55,12 @@ public class PlaybackService {
         session.setExpiresAt(LocalDateTime.now().plusHours(2));
 
         playbackSessionRepository.save(session);
+
+        playbackAnalyticsProducer.publishTrackPlaybackStarted(new TrackPlaybackStartedEvent(session.getId(),
+                                                                                            session.getUserId(),
+                                                                                            session.getTrackId(),
+                                                                                            session.getDeviceId(),
+                                                                                            session.getStartedAt()));
 
         String streamUrl = publicBaseUrl + "/api/playback/streams/" + session.getId();
 
