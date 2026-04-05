@@ -84,6 +84,16 @@ services:
       MINIO_BUCKET: beatflow-audio
     ports:
       - "9183:8183"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./beatflow-frontendDockerfile
+    container_name: beatflow-frontend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:80"
+      
   auth:
     build:
       context: .

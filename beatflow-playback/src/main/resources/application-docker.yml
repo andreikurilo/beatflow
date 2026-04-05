@@ -2,8 +2,8 @@ spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/beatflow_playback
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: postgres
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
 
 catalog:
   base-url: http://catalog:8182
