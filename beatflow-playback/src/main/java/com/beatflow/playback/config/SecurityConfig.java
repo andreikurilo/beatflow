@@ -29,7 +29,7 @@ public class SecurityConfig {
                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                    .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
                                                       .permitAll()
-                                                      .requestMatchers(HttpMethod.GET, "/api/playback/streams/*")
+                                                      .requestMatchers(HttpMethod.GET, "/api/playback/streams/**")
                                                       .permitAll()
                                                       .anyRequest()
                                                       .authenticated())

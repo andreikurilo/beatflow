@@ -7,6 +7,7 @@ import com.beatflow.playback.service.PlaybackService;
 import io.minio.StatObjectResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/playback")
 @RequiredArgsConstructor
+@Slf4j
 public class PlaybackController {
 
     private final PlaybackService playbackService;
@@ -77,6 +79,7 @@ public class PlaybackController {
                                      .body(data);
             }
         } catch (Exception e) {
+            log.error("Playback stream failed for session {}", sessionId, e);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
