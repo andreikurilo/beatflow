@@ -109,6 +109,12 @@ export default function HomePage() {
               {email ?? "Unknown user"}
             </div>
 
+            <button
+              onClick={() => navigate("/analytics")}
+              style={styles.analyticsButton}
+            >
+              View History
+            </button>
             <button onClick={handleLogout} style={styles.logoutButton}>
               <LogOut size={16} />
               Logout
@@ -327,7 +333,20 @@ const styles: Record<string, React.CSSProperties> = {
   userCardMobile: {
     textAlign: "left",
   },
-
+  analyticsButton: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "10px 16px",
+    borderRadius: 14,
+    border: "1px solid rgba(59,130,246,0.3)",
+    background: "rgba(59,130,246,0.1)",
+    color: "#bfdbfe",
+    fontWeight: 600,
+    fontSize: 14,
+    cursor: "pointer",
+    width: "100%",
+  },
   logoutButton: {
     display: "inline-flex",
     alignItems: "center",

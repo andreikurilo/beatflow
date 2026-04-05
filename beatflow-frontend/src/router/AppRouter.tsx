@@ -6,6 +6,7 @@ import RegisterPage from "../pages/RegisterPage/RegisterPage";
 import AboutPage from "../pages/AboutPage";
 import CreditsPage from "../pages/CreditsPage";
 import DisclaimerPage from "../pages/DisclaimerPage";
+import AnalyticsPage from "../pages/AnalyticsPage";
 
 export default function AppRouter() {
   return (
@@ -21,6 +22,14 @@ export default function AppRouter() {
           element={
             <ProtectedRoute>
               <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <AnalyticsPage />
             </ProtectedRoute>
           }
         />
