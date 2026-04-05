@@ -114,7 +114,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: "32px 20px",
+    padding: "24px 16px",
     position: "relative",
     overflow: "hidden",
   },
@@ -154,8 +154,8 @@ const styles: Record<string, React.CSSProperties> = {
 
   authShell: {
     display: "grid",
-    gridTemplateColumns: "1.1fr 0.9fr",
-    gap: 28,
+    gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+    gap: 20,
     alignItems: "stretch",
   },
 
@@ -164,11 +164,12 @@ const styles: Record<string, React.CSSProperties> = {
     background:
       "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015))",
     borderRadius: 28,
-    padding: 28,
+    padding: "clamp(20px, 4vw, 28px)",
     boxShadow: "0 20px 60px rgba(0,0,0,0.24)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    minWidth: 0,
   },
 
   logoCard: {
@@ -183,7 +184,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   logo: {
     width: "100%",
-    height: 180,
+    height: "clamp(120px, 28vw, 180px)",
     objectFit: "contain",
     display: "block",
   },
@@ -228,7 +229,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   title: {
     margin: "0 0 12px",
-    fontSize: 42,
+    fontSize: "clamp(30px, 6vw, 42px)",
     lineHeight: 1.05,
     letterSpacing: -1.2,
     color: "white",
@@ -247,11 +248,12 @@ const styles: Record<string, React.CSSProperties> = {
     background:
       "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015))",
     borderRadius: 28,
-    padding: 28,
+    padding: "clamp(20px, 4vw, 28px)",
     boxShadow: "0 20px 60px rgba(0,0,0,0.24)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    minWidth: 0,
   },
 
   formHeader: {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ShieldPlus, Sparkles } from "lucide-react";
 import { register } from "../../api/auth";
@@ -12,6 +12,14 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,7 +42,12 @@ export default function RegisterPage() {
       <div style={styles.backgroundGlowBottom} />
 
       <div style={styles.container}>
-        <div style={styles.authShell}>
+        <div
+          style={{
+            ...styles.authShell,
+            ...(isMobile ? styles.authShellMobile : null),
+          }}
+        >
           <div style={styles.brandPanel}>
             <div style={styles.logoCard}>
               <img
@@ -111,7 +124,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: "32px 20px",
+    padding: "24px 16px",
     position: "relative",
     overflow: "hidden",
   },
@@ -156,16 +169,22 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: "stretch",
   },
 
+  authShellMobile: {
+    gridTemplateColumns: "1fr",
+    gap: 20,
+  },
+
   brandPanel: {
     border: "1px solid rgba(255,255,255,0.06)",
     background:
       "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015))",
     borderRadius: 28,
-    padding: 28,
+    padding: "clamp(20px, 4vw, 28px)",
     boxShadow: "0 20px 60px rgba(0,0,0,0.24)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    minWidth: 0,
   },
 
   logoCard: {
@@ -180,7 +199,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   logo: {
     width: "100%",
-    height: 180,
+    height: "clamp(120px, 28vw, 180px)",
     objectFit: "contain",
     display: "block",
   },
@@ -225,7 +244,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   title: {
     margin: "0 0 12px",
-    fontSize: 42,
+    fontSize: "clamp(30px, 6vw, 42px)",
     lineHeight: 1.05,
     letterSpacing: -1.2,
     color: "white",
@@ -244,11 +263,12 @@ const styles: Record<string, React.CSSProperties> = {
     background:
       "linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015))",
     borderRadius: 28,
-    padding: 28,
+    padding: "clamp(20px, 4vw, 28px)",
     boxShadow: "0 20px 60px rgba(0,0,0,0.24)",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    minWidth: 0,
   },
 
   formHeader: {

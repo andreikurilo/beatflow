@@ -18,6 +18,14 @@ export default function HomePage() {
 
   const [tracks, setTracks] = useState<Track[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     getTracks()
@@ -51,7 +59,12 @@ export default function HomePage() {
       <div style={styles.backgroundGlowBottom} />
 
       <div style={styles.container}>
-        <header style={styles.header}>
+        <header
+          style={{
+            ...styles.header,
+            ...(isMobile ? styles.headerMobile : null),
+          }}
+        >
           <div style={styles.brandBlock}>
             <div style={styles.logoCard}>
               <img
@@ -83,23 +96,14 @@ export default function HomePage() {
 
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-              gap: 6,
-              flexShrink: 0,
-              marginTop: 8,
+              ...styles.accountBlock,
+              ...(isMobile ? styles.accountBlockMobile : null),
             }}
           >
             <div
               style={{
-                padding: "10px 14px",
-                borderRadius: 16,
-                border: "1px solid rgba(255,255,255,0.08)",
-                background: "rgba(255,255,255,0.04)",
-                color: "rgba(255,255,255,0.88)",
-                fontSize: 14,
-                fontWeight: 600,
+                ...styles.userCard,
+                ...(isMobile ? styles.userCardMobile : null),
               }}
             >
               {email ?? "Unknown user"}
@@ -114,7 +118,12 @@ export default function HomePage() {
 
         <main style={styles.mainGrid}>
           <section style={styles.libraryCard}>
-            <div style={styles.libraryHeader}>
+            <div
+              style={{
+                ...styles.libraryHeader,
+                ...(isMobile ? styles.libraryHeaderMobile : null),
+              }}
+            >
               <div>
                 <h2 style={styles.sectionTitle}>Library</h2>
                 <p style={styles.sectionSubtitle}>
@@ -153,7 +162,7 @@ export default function HomePage() {
 const styles: Record<string, React.CSSProperties> = {
   page: {
     minHeight: "100vh",
-    padding: "28px 28px 220px",
+    padding: "20px 16px 220px",
     position: "relative",
     overflow: "hidden",
   },
@@ -163,6 +172,7 @@ const styles: Record<string, React.CSSProperties> = {
     margin: "0 auto",
     position: "relative",
     zIndex: 1,
+    width: "100%",
   },
 
   backgroundGlowTop: {
@@ -199,12 +209,18 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: 28,
   },
 
+  headerMobile: {
+    flexDirection: "column-reverse",
+  },
+
   brandBlock: {
     display: "grid",
-    gridTemplateColumns: "280px 1fr",
+    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
     gap: 24,
     alignItems: "center",
     flex: 1,
+    minWidth: 0,
+    width: "100%",
   },
 
   logoCard: {
@@ -214,12 +230,13 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 24,
     padding: 16,
     boxShadow: "0 18px 50px rgba(0,0,0,0.22)",
+    minWidth: 0,
   },
 
   logo: {
     width: "100%",
-    height: 140,
-    objectFit: "contain",
+    height: "clamp(100px, 24vw, 140px)",
+    objectFit: "cover",
     display: "block",
   },
 
@@ -264,7 +281,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   title: {
     margin: "0 0 10px",
-    fontSize: 42,
+    fontSize: "clamp(30px, 6vw, 42px)",
     lineHeight: 1.05,
     letterSpacing: -1.2,
     color: "white",
@@ -278,9 +295,43 @@ const styles: Record<string, React.CSSProperties> = {
     color: "rgba(255,255,255,0.72)",
   },
 
+  accountBlock: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-end",
+    gap: 6,
+    flexShrink: 0,
+    marginTop: 8,
+    width: "100%",
+    maxWidth: 240,
+  },
+
+  accountBlockMobile: {
+    maxWidth: "100%",
+    alignItems: "stretch",
+  },
+
+  userCard: {
+    padding: "10px 14px",
+    borderRadius: 16,
+    border: "1px solid rgba(255,255,255,0.08)",
+    background: "rgba(255,255,255,0.04)",
+    color: "rgba(255,255,255,0.88)",
+    fontSize: 14,
+    fontWeight: 600,
+    width: "100%",
+    boxSizing: "border-box",
+    overflowWrap: "anywhere",
+  },
+
+  userCardMobile: {
+    textAlign: "left",
+  },
+
   logoutButton: {
     display: "inline-flex",
     alignItems: "center",
+    justifyContent: "center",
     gap: 8,
     padding: "12px 18px",
     borderRadius: 16,
@@ -293,6 +344,7 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 12px 30px rgba(34,197,94,0.2)",
     flexShrink: 0,
     marginTop: 8,
+    width: "100%",
   },
 
   mainGrid: {
@@ -317,6 +369,11 @@ const styles: Record<string, React.CSSProperties> = {
     gap: 16,
     padding: "20px 22px",
     borderBottom: "1px solid rgba(255,255,255,0.06)",
+    flexWrap: "wrap",
+  },
+
+  libraryHeaderMobile: {
+    alignItems: "flex-start",
   },
 
   sectionTitle: {
@@ -335,6 +392,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     gap: 8,
+    flexWrap: "wrap",
   },
 
   metaPill: {

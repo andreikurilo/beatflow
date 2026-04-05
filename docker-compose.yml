@@ -79,8 +79,8 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       JWT_SECRET: super-secret-key-super-secret-key-123456
       INTERNAL_API_KEY: dev-internal-key
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio123
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
       MINIO_BUCKET: beatflow-audio
     ports:
       - "9183:8183"
@@ -88,12 +88,12 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./beatflow-frontendDockerfile
+      dockerfile: ./beatflow-frontend/Dockerfile
     container_name: beatflow-frontend
     restart: unless-stopped
     ports:
       - "127.0.0.1:3000:80"
-      
+
   auth:
     build:
       context: .
