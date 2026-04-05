@@ -8,6 +8,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private static final String REFRESH_TOKEN_COOKIE = "refreshToken";
+    private static final int REFRESH_TOKEN_MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
+
     private final AuthService authService;
+
+    @Value("${app.cookies.secure:false}")
+    private boolean secureCookies;
 
     @GetMapping("/ping")
     public String ping() {
@@ -33,34 +40,31 @@ public class AuthController {
     public AuthResponse login(@RequestBody LoginRequest request, HttpServletResponse response) {
         AuthResponse auth = authService.login(request);
 
-        Cookie cookie = new Cookie("refreshToken", auth.getRefreshToken());
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(7 * 24 * 60 * 60);
-        cookie.setSecure(false); // dev
-
-        response.addCookie(cookie);
+        addCookie(response, auth.getRefreshToken(), REFRESH_TOKEN_MAX_AGE_SECONDS);
 
         return new AuthResponse(auth.getAccessToken(), null);
     }
 
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout(@CookieValue(value = "refreshToken", required = false) String refreshToken,
+    public void logout(@CookieValue(value = REFRESH_TOKEN_COOKIE, required = false) String refreshToken,
                        HttpServletResponse response) {
         authService.logout(refreshToken);
 
-        Cookie cookie = new Cookie("refreshToken", "");
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        cookie.setSecure(false);
-
-        response.addCookie(cookie);
+        addCookie(response, "", 0);
     }
 
     @PostMapping("/refresh")
-    public AuthResponse refresh(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
+    public AuthResponse refresh(@CookieValue(value = REFRESH_TOKEN_COOKIE, required = false) String refreshToken) {
         return authService.refresh(refreshToken);
+    }
+
+    private void addCookie(HttpServletResponse response, String value, int maxAge) {
+        Cookie cookie = new Cookie(AuthController.REFRESH_TOKEN_COOKIE, value);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(maxAge);
+        cookie.setSecure(secureCookies);
+        response.addCookie(cookie);
     }
 }
