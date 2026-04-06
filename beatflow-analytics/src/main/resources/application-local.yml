@@ -9,6 +9,9 @@ spring:
     consumer:
       group-id: beatflow-analytics-v2
 
+catalog:
+  base-url: http://localhost:8182
+
 app:
   public-base-url: https://beatflow.akurilo.com
   cors:

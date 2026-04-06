@@ -4,6 +4,7 @@ import com.beatflow.catalog.domain.Genre;
 import com.beatflow.catalog.domain.Track;
 import com.beatflow.catalog.dto.TrackPlaybackResponse;
 import com.beatflow.catalog.dto.TrackResponse;
+import com.beatflow.catalog.dto.TrackSummaryResponse;
 import com.beatflow.catalog.repository.TrackRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,20 @@ import java.util.UUID;
 public class TrackService {
 
     private final TrackRepository trackRepository;
+
+    public List<TrackSummaryResponse> getTracksByIds(List<UUID> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return List.of();
+        }
+
+        return trackRepository.findAllById(ids)
+                              .stream()
+                              .map(track -> new TrackSummaryResponse(track.getId(),
+                                                                     track.getTitle(),
+                                                                     track.getAlbum().getArtist().getName(),
+                                                                     track.getAlbum().getTitle()))
+                              .toList();
+    }
 
     public List<TrackResponse> getAllTracks() {
         return trackRepository.findAll().stream().map(this::toResponse).toList();

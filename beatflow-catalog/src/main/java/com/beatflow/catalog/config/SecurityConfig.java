@@ -28,6 +28,8 @@ public class SecurityConfig {
                                                       .permitAll()
                                                       .requestMatchers("/api/tracks/*/playback")
                                                       .permitAll()
+                                                      .requestMatchers(HttpMethod.POST, "/api/tracks/internal/by-ids")
+                                                      .permitAll()
                                                       .anyRequest()
                                                       .authenticated())
                    .build();

@@ -1,14 +1,17 @@
 package com.beatflow.analytics.controller;
 
-import com.beatflow.analytics.domain.PlaybackHistory;
+import com.beatflow.analytics.dto.PlaybackHistoryResponse;
 import com.beatflow.analytics.service.AnalyticsService;
 import com.beatflow.common.security.JwtTokenService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -20,9 +23,10 @@ public class AnalyticsController {
     private final JwtTokenService jwtTokenService;
 
     @GetMapping("/me/history")
-    public List<PlaybackHistory> getMyPlaybackHistory(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
+    public Page<PlaybackHistoryResponse> getMyPlaybackHistory(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+                                                              @PageableDefault(size = 20, sort = "startedAt", direction = Sort.Direction.DESC) Pageable pageable) {
         UUID userId = extractUserId(authorization);
-        return analyticsService.getUserPlaybackHistory(userId);
+        return analyticsService.getUserPlaybackHistory(userId, pageable);
     }
 
     private UUID extractUserId(String authorization) {

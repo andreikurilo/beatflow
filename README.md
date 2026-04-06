@@ -67,6 +67,7 @@ docker compose up --build
 - Auth → http://localhost:8181
 - Catalog → http://localhost:8182
 - Playback → http://localhost:8183
+- Analytics → http://localhost:8184
 - Frontend → http://localhost:5173
 
 ---

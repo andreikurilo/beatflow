@@ -12,14 +12,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CatalogClient {
 
-    private final CatalogProperties catalogProperties;
+    private final RestClient restClient;
+
+    public CatalogClient(CatalogProperties catalogProperties) {
+        this.restClient = RestClient.builder()
+                                    .baseUrl(catalogProperties.getBaseUrl())
+                                    .defaultHeader("X-Internal-Api-Key", catalogProperties.getInternalApiKey())
+                                    .build();
+    }
 
     public TrackPlaybackResponse getTrackPlayback(UUID trackId) {
-        RestClient client = RestClient.builder()
-                                      .baseUrl(catalogProperties.getBaseUrl())
-                                      .defaultHeader("X-Internal-Api-Key", catalogProperties.getInternalApiKey())
-                                      .build();
-
-        return client.get().uri("/api/tracks/{id}/playback", trackId).retrieve().body(TrackPlaybackResponse.class);
+        return restClient.get().uri("/api/tracks/{id}/playback", trackId).retrieve().body(TrackPlaybackResponse.class);
     }
 }

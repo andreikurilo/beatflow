@@ -2,6 +2,7 @@ package com.beatflow.catalog.controller;
 
 import com.beatflow.catalog.dto.TrackPlaybackResponse;
 import com.beatflow.catalog.dto.TrackResponse;
+import com.beatflow.catalog.dto.TrackSummaryResponse;
 import com.beatflow.catalog.service.TrackService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,10 +36,20 @@ public class TrackController {
     @GetMapping("/{id}/playback")
     public TrackPlaybackResponse getTrackPlaybackById(@PathVariable UUID id,
                                                       @RequestHeader("X-Internal-Api-Key") String apiKey) {
+        validateInternalApiKey(apiKey);
+        return trackService.getTrackPlaybackById(id);
+    }
+
+    @PostMapping("/internal/by-ids")
+    public List<TrackSummaryResponse> getTracksByIds(@RequestBody List<UUID> ids,
+                                                     @RequestHeader("X-Internal-Api-Key") String apiKey) {
+        validateInternalApiKey(apiKey);
+        return trackService.getTracksByIds(ids);
+    }
+
+    private void validateInternalApiKey(String apiKey) {
         if (!internalApiKey.equals(apiKey)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Forbidden");
         }
-
-        return trackService.getTrackPlaybackById(id);
     }
 }

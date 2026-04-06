@@ -20,7 +20,6 @@ jwt:
   access-token-expiration-ms: 900000
 
 catalog:
-  base-url: ${CATALOG_BASE_URL:http://localhost:8182}
   internal-api-key: ${INTERNAL_API_KEY:dev-internal-key}
 
 minio:

@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { getTracks, type Track } from "../api/catalog";
 import {
   getMyPlaybackHistory,
   type PlaybackHistoryItem,
@@ -13,25 +12,50 @@ function formatDate(value: string) {
   return d.toLocaleString();
 }
 
+const PAGE_SIZE = 10;
+
 export default function AnalyticsPage() {
   const navigate = useNavigate();
 
-  const [tracks, setTracks] = useState<Track[]>([]);
   const [history, setHistory] = useState<PlaybackHistoryItem[]>([]);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   useEffect(() => {
-    Promise.all([getTracks(), getMyPlaybackHistory()])
-      .then(([tracksData, historyData]) => {
-        setTracks(tracksData);
-        setHistory(historyData);
-      })
-      .finally(() => setLoading(false));
+    async function loadInitialData() {
+      try {
+        const historyPage = await getMyPlaybackHistory(0, PAGE_SIZE);
+
+        setHistory(historyPage.content);
+        setPage(historyPage.number);
+        setHasMore(!historyPage.last);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadInitialData();
   }, []);
 
-  const trackMap = useMemo(() => {
-    return new Map(tracks.map((t) => [t.id, t]));
-  }, [tracks]);
+  async function handleLoadMore() {
+    if (loadingMore || !hasMore) return;
+
+    setLoadingMore(true);
+
+    try {
+      const nextPage = page + 1;
+      const historyPage = await getMyPlaybackHistory(nextPage, PAGE_SIZE);
+
+      setHistory((prev) => [...prev, ...historyPage.content]);
+      setPage(historyPage.number);
+      setHasMore(!historyPage.last);
+    } finally {
+      setLoadingMore(false);
+    }
+  }
 
   return (
     <div style={styles.page}>
@@ -50,31 +74,45 @@ export default function AnalyticsPage() {
         ) : history.length === 0 ? (
           <div style={styles.loading}>No history yet</div>
         ) : (
-          <div style={styles.list}>
-            {history.map((item) => {
-              const track = trackMap.get(item.trackId);
-
-              return (
-                <div key={item.id} style={styles.card}>
-                  <div>
-                    <div style={styles.trackTitle}>
-                      {track?.title ?? item.trackId}
+          <>
+            <div style={styles.list}>
+              {history.map((item) => {
+                return (
+                  <div key={item.id} style={styles.card}>
+                    <div>
+                      <div style={styles.trackTitle}>
+                        {item.trackTitle ?? item.trackId}
+                      </div>
+                      <div style={styles.meta}>
+                        {item.artistName && item.albumTitle
+                          ? `${item.artistName} • ${item.albumTitle}`
+                          : "Unknown track"}
+                      </div>
                     </div>
-                    <div style={styles.meta}>
-                      {track
-                        ? `${track.artistName} • ${track.albumTitle}`
-                        : "Unknown track"}
+
+                    <div style={styles.side}>
+                      <div style={styles.device}>{item.deviceId}</div>
+                      <div style={styles.time}>
+                        {formatDate(item.startedAt)}
+                      </div>
                     </div>
                   </div>
+                );
+              })}
+            </div>
 
-                  <div style={styles.side}>
-                    <div style={styles.device}>{item.deviceId}</div>
-                    <div style={styles.time}>{formatDate(item.startedAt)}</div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+            {hasMore && (
+              <div style={styles.loadMoreWrapper}>
+                <button
+                  onClick={handleLoadMore}
+                  disabled={loadingMore}
+                  style={styles.loadMoreButton}
+                >
+                  {loadingMore ? "Loading..." : "Load more"}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -145,5 +183,18 @@ const styles: Record<string, React.CSSProperties> = {
   time: {
     fontSize: 12,
     color: "rgba(255,255,255,0.5)",
+  },
+  loadMoreWrapper: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  loadMoreButton: {
+    padding: "10px 16px",
+    borderRadius: 12,
+    border: "1px solid rgba(255,255,255,0.1)",
+    background: "transparent",
+    color: "white",
+    cursor: "pointer",
   },
 };
