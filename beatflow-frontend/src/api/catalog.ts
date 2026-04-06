@@ -6,9 +6,11 @@ export interface Track {
   id: string;
   title: string;
   durationSeconds: number;
-  audioUrl: string;
+  albumId: string;
   albumTitle: string;
+  artistId: string;
   artistName: string;
+  genres: string[];
 }
 
 export async function getTracks(): Promise<Track[]> {

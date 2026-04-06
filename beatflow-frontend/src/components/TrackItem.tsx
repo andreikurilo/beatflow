@@ -26,6 +26,12 @@ export default function TrackItem({ track }: { track: Track }) {
         <small>
           {track.artistName} • {track.albumTitle}
         </small>
+
+        {track.genres.length > 0 && (
+          <div>
+            <small>{track.genres.join(", ")}</small>
+          </div>
+        )}
       </div>
 
       <div>
