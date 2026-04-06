@@ -119,6 +119,12 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     ports:
       - "127.0.0.1:8182:8182"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8182/actuator/health"]
+      interval: 40s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   analytics:
     build:
@@ -137,6 +143,12 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     ports:
       - "127.0.0.1:8184:8184"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8184/actuator/health"]
+      interval: 40s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   playback:
     build:
@@ -160,6 +172,12 @@ services:
       APP_PUBLIC_BASE_URL: ${APP_PUBLIC_BASE_URL:-http://localhost:8183}
     ports:
       - "127.0.0.1:8183:8183"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8183/actuator/health"]
+      interval: 40s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 volumes:
   postgres_data:

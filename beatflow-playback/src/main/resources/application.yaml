@@ -22,6 +22,16 @@ jwt:
 catalog:
   internal-api-key: ${INTERNAL_API_KEY:dev-internal-key}
 
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+
 minio:
   url: ${MINIO_URL:http://localhost:9000}
   access-key: ${MINIO_ROOT_USER:minio}
