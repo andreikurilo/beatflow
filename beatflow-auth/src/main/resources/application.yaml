@@ -22,4 +22,12 @@ jwt:
   secret: ${JWT_SECRET:super-secret-key-super-secret-key-123456}
   access-token-expiration-ms: 900000
 
-
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health

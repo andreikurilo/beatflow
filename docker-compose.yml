@@ -80,6 +80,7 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:3000:80"
+
   auth:
     build:
       context: .
@@ -95,6 +96,12 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     ports:
       - "127.0.0.1:8181:8181"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8181/actuator/health"]
+      interval: 40s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   catalog:
     build:
