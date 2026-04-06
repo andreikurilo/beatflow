@@ -2,14 +2,12 @@ package com.beatflow.playback.client;
 
 import com.beatflow.playback.config.CatalogProperties;
 import com.beatflow.playback.dto.TrackPlaybackResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import java.util.UUID;
 
 @Component
-@RequiredArgsConstructor
 public class CatalogClient {
 
     private final RestClient restClient;
