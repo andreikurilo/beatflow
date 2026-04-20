@@ -29,7 +29,6 @@ services:
     image: confluentinc/cp-zookeeper:7.6.1
     container_name: beatflow-zookeeper
     restart: unless-stopped
-    profiles: [ "demo-extra" ]
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -44,7 +43,6 @@ services:
     image: confluentinc/cp-kafka:7.6.1
     container_name: beatflow-kafka
     restart: unless-stopped
-    profiles: [ "demo-extra" ]
     depends_on:
       - zookeeper
     ports:
@@ -66,7 +64,6 @@ services:
     image: provectuslabs/kafka-ui:latest
     container_name: beatflow-kafka-ui
     restart: unless-stopped
-    profiles: [ "demo-extra" ]
     depends_on:
       - kafka
     ports:
@@ -168,7 +165,6 @@ services:
       dockerfile: ./beatflow-analytics/Dockerfile
     container_name: beatflow-analytics
     restart: unless-stopped
-    profiles: [ "demo-extra" ]
     depends_on:
       - postgres
       - kafka
