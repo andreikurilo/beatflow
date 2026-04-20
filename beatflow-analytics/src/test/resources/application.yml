@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  kafka:
+    bootstrap-servers: localhost:9092
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+  flyway:
+    enabled: false
+
+catalog:
+  base-url: http://localhost:8182
+
+app:
+  public-base-url: https://beatflow.akurilo.com

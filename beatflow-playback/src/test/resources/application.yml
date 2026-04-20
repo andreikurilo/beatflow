@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  kafka:
+    bootstrap-servers: localhost:9092
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+  flyway:
+    enabled: false
+app:
+  public-base-url: http://localhost:8183
