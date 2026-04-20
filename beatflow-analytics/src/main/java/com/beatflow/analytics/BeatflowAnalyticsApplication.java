@@ -11,5 +11,4 @@ public class BeatflowAnalyticsApplication {
     public static void main(String[] args) {
         SpringApplication.run(BeatflowAnalyticsApplication.class, args);
     }
-
 }

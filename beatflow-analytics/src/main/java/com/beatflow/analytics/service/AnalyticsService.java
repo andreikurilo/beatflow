@@ -29,7 +29,7 @@ public class AnalyticsService {
         List<UUID> trackIds = historyPage.getContent().stream().map(PlaybackHistory::getTrackId).distinct().toList();
 
         Map<UUID, TrackSummaryResponse> trackMap = getTrackMap(trackIds);
-        
+
         return historyPage.map(history -> {
             TrackSummaryResponse track = trackMap.get(history.getTrackId());
 

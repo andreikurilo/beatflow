@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -31,7 +32,7 @@ public class AnalyticsController {
 
     private UUID extractUserId(String authorization) {
         if (authorization == null || !authorization.startsWith("Bearer ")) {
-            throw new RuntimeException("Missing Authorization header");
+            throw new BadCredentialsException("Missing Authorization header");
         }
 
         String token = authorization.substring(7);

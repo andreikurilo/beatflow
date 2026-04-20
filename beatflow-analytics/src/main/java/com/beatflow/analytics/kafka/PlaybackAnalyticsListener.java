@@ -18,6 +18,7 @@ public class PlaybackAnalyticsListener {
 
     private final PlaybackHistoryRepository playbackHistoryRepository;
 
+    @SuppressWarnings("unused")
     @KafkaListener(topics = "track-playback-started", groupId = "beatflow-analytics-v2")
     public void handleTrackPlaybackStarted(TrackPlaybackStartedEvent event) {
         log.info("Received playback event: sessionId={}, userId={}, trackId={}",

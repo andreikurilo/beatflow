@@ -31,7 +31,7 @@ public class CatalogClient {
                                                         .uri("/api/tracks/internal/by-ids")
                                                         .body(trackIds)
                                                         .retrieve()
-                                                        .body(new ParameterizedTypeReference<List<TrackSummaryResponse>>() {
+                                                        .body(new ParameterizedTypeReference<>() {
                                                         });
 
         return response != null ? response : Collections.emptyList();

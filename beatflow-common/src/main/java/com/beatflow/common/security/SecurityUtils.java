@@ -1,5 +1,6 @@
 package com.beatflow.common.security;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -14,7 +15,7 @@ public final class SecurityUtils {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || authentication.getName() == null) {
-            throw new RuntimeException("Unauthenticated");
+            throw new BadCredentialsException("Unauthenticated");
         }
 
         return UUID.fromString(authentication.getName());

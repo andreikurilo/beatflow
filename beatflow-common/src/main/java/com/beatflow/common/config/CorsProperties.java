@@ -14,5 +14,4 @@ import java.util.List;
 public class CorsProperties {
 
     private List<String> allowedOrigins;
-
 }

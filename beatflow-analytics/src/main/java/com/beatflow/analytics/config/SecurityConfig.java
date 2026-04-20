@@ -17,7 +17,7 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http,
-                                                      JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+                                                      JwtAuthenticationFilter jwtAuthenticationFilter) {
         return http.securityMatcher("/api/**")
                    .cors(cors -> {
                    })

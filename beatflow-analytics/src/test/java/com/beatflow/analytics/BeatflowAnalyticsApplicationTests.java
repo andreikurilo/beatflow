@@ -9,5 +9,4 @@ class BeatflowAnalyticsApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
