@@ -3,7 +3,7 @@
 Beatflow is a modern demo music streaming platform showcasing a microservices architecture, real-time playback, and a polished frontend experience.
 
 - 👉 Live demo: https://beatflow.akurilo.com
-- 🎥 Demo video: (add your recording here)
+- 🎥 Demo video: comming
 
 ## ✨ Features
 
