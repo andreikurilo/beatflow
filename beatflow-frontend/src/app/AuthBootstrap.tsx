@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { refresh } from "../api/auth";
 import { useAuthStore } from "./store";
 
-type Props = {
+type Props = Readonly<{
   children: React.ReactNode;
-};
+}>;
 
 export default function AuthBootstrap({ children }: Props) {
   const setAccessToken = useAuthStore((s) => s.setAccessToken);

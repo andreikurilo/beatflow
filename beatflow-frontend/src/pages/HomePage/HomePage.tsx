@@ -6,8 +6,6 @@ import { usePlayerStore } from "../../app/playerStore";
 import { logout } from "../../api/auth";
 import { getTracks, type Track } from "../../api/catalog";
 import TrackItem from "../../components/TrackItem";
-import AudioPlayer from "../../components/AudioPlayer";
-import PlayerBar from "../../components/PlayerBar";
 import Footer from "../../components/Footer";
 
 export default function HomePage() {
@@ -19,6 +17,8 @@ export default function HomePage() {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+
+  const resetPlayer = usePlayerStore((s) => s.reset);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -48,6 +48,7 @@ export default function HomePage() {
     } catch {
       // ignore
     } finally {
+      resetPlayer();
       clearAuth();
       navigate("/login");
     }
@@ -159,8 +160,7 @@ export default function HomePage() {
       <div style={{ marginTop: 32 }}>
         <Footer />
       </div>
-      <AudioPlayer />
-      <PlayerBar />
+
     </div>
   );
 }
