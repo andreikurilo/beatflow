@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 
-type AuthCardProps = {
+type AuthCardProps = Readonly<{
   title: string;
   subtitle: string;
   children: ReactNode;
-};
+}>;
 
 export default function AuthCard({ title, subtitle, children }: AuthCardProps) {
   return (

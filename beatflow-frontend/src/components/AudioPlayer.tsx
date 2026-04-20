@@ -72,18 +72,19 @@ export default function AudioPlayer() {
       return;
     }
 
-    const handleLoadedMetadata = () => {
+    const setUiProgress = () => {
       setProgress(
         audio.currentTime,
         Number.isFinite(audio.duration) ? audio.duration : 0,
       );
+    }
+
+    const handleLoadedMetadata = () => {
+      setUiProgress();
     };
 
     const handleTimeUpdate = () => {
-      setProgress(
-        audio.currentTime,
-        Number.isFinite(audio.duration) ? audio.duration : 0,
-      );
+      setUiProgress();
     };
 
     const handleEnded = () => {
@@ -101,5 +102,17 @@ export default function AudioPlayer() {
     };
   }, [setProgress, playNext]);
 
-  return <audio ref={audioRef} preload="metadata" />;
+  const EMPTY_VTT = "data:text/vtt;charset=utf-8,WEBVTT%0A%0A";
+
+  return (
+    <audio ref={audioRef} preload="metadata" style={{ display: "none" }}>
+      <track
+        kind="captions"
+        src={EMPTY_VTT}
+        srcLang="en"
+        label="Empty captions"
+        default
+      />
+    </audio>
+  );
 }

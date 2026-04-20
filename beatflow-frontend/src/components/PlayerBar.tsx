@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import {
   Pause,
   Play,
+  Shuffle,
   SkipBack,
   SkipForward,
   Volume2,
   VolumeX,
+  X,
 } from "lucide-react";
 import { usePlayerStore } from "../app/playerStore";
 
@@ -63,8 +65,12 @@ export default function PlayerBar() {
   const seek = usePlayerStore((s) => s.seek);
   const playNext = usePlayerStore((s) => s.playNext);
   const playPrevious = usePlayerStore((s) => s.playPrevious);
+  const reset = usePlayerStore((s) => s.reset);
 
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+
+  const isShuffleEnabled = usePlayerStore((s) => s.isShuffleEnabled);
+  const toggleShuffle = usePlayerStore((s) => s.toggleShuffle);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -113,6 +119,19 @@ export default function PlayerBar() {
           <div style={styles.controlsRow}>
             <button
               type="button"
+              style={{
+                ...iconButtonStyle,
+                ...(isShuffleEnabled ? styles.activeIconButton : null),
+              }}
+              aria-label={isShuffleEnabled ? "Disable shuffle" : "Enable shuffle"}
+              title={isShuffleEnabled ? "Shuffle on" : "Shuffle off"}
+              onClick={toggleShuffle}
+            >
+              <Shuffle size={18} />
+            </button>
+
+            <button
+              type="button"
               style={iconButtonStyle}
               aria-label="Previous"
               onClick={() => void playPrevious()}
@@ -132,11 +151,7 @@ export default function PlayerBar() {
               style={controlButtonStyle}
               aria-label={isPlaying ? "Pause" : "Play"}
             >
-              {isPlaying ? (
-                <Pause size={22} />
-              ) : (
-                <Play size={22} fill="black" />
-              )}
+              {isPlaying ? <Pause size={22} /> : <Play size={22} fill="black" />}
             </button>
 
             <button
@@ -205,6 +220,16 @@ export default function PlayerBar() {
             }}
             aria-label="Volume"
           />
+
+          <button
+            type="button"
+            onClick={reset}
+            style={styles.closeButton}
+            aria-label="Close player"
+            title="Close player"
+          >
+            <X size={18} />
+          </button>
         </div>
       </div>
     </div>
@@ -271,6 +296,11 @@ const styles: Record<string, React.CSSProperties> = {
     overflow: "hidden",
     textOverflow: "ellipsis",
     fontSize: 15,
+  },
+  activeIconButton: {
+    background: "rgba(34,197,94,0.18)",
+    border: "1px solid rgba(34,197,94,0.4)",
+    color: "#86efac",
   },
 
   artistName: {
@@ -345,5 +375,21 @@ const styles: Record<string, React.CSSProperties> = {
 
   volumeInputMobile: {
     width: "100%",
+  },
+
+  closeButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 999,
+    border: "none",
+    background: "transparent",
+    color: "white",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    padding: 0,
+    opacity: 0.72,
+    flexShrink: 0,
   },
 };

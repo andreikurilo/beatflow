@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes } from "react";
 
-type TextInputProps = InputHTMLAttributes<HTMLInputElement>;
+type TextInputProps = Readonly<InputHTMLAttributes<HTMLInputElement>>;
 
 export default function TextInput(props: TextInputProps) {
   return <input {...props} style={{ ...styles.input, ...props.style }} />;

@@ -2,11 +2,11 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
-type InfoPageLayoutProps = {
+type InfoPageLayoutProps = Readonly<{
   title: string;
   subtitle: string;
   children: ReactNode;
-};
+}>;
 
 export default function InfoPageLayout({
   title,

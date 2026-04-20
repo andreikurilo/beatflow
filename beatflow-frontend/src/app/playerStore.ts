@@ -6,7 +6,6 @@ export interface QueueTrack {
   title: string;
   artistName: string;
 }
-
 interface PlayerState {
   queue: QueueTrack[];
   currentTrackId: string | null;
@@ -18,6 +17,7 @@ interface PlayerState {
   isPlaying: boolean;
   volume: number;
   previousVolume: number;
+  isShuffleEnabled: boolean;
 
   setQueue: (tracks: QueueTrack[]) => void;
   playTrack: (track: QueueTrack) => Promise<void>;
@@ -29,6 +29,7 @@ interface PlayerState {
   seek: (time: number) => void;
   setVolume: (volume: number) => void;
   toggleMute: () => void;
+  toggleShuffle: () => void;
   reset: () => void;
 }
 
@@ -55,8 +56,14 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   duration: 0,
   currentTime: 0,
   isPlaying: false,
+  isShuffleEnabled: false,
   volume: 1,
   previousVolume: 1,
+
+  toggleShuffle: () =>
+    set((state) => ({
+      isShuffleEnabled: !state.isShuffleEnabled,
+    })),
 
   setQueue: (tracks) =>
     set(() => ({
@@ -69,15 +76,21 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   },
 
   playNext: async () => {
-    const { queue, currentTrackId } = get();
+    const { queue, currentTrackId, isShuffleEnabled } = get();
     if (!queue.length || !currentTrackId) return;
 
-    const currentIndex = queue.findIndex(
-      (track) => track.id === currentTrackId,
-    );
+    const currentIndex = queue.findIndex((track) => track.id === currentTrackId);
     if (currentIndex === -1) return;
 
-    const nextTrack = queue[currentIndex + 1];
+    let nextTrack: QueueTrack | undefined;
+
+    if (isShuffleEnabled && queue.length > 1) {
+      const candidates = queue.filter((track) => track.id !== currentTrackId);
+      nextTrack = candidates[Math.floor(Math.random() * candidates.length)];
+    } else {
+      nextTrack = queue[currentIndex + 1];
+    }
+
     if (!nextTrack) return;
 
     const nextState = await resolveTrackPlayback(nextTrack);
@@ -85,7 +98,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   },
 
   playPrevious: async () => {
-    const { queue, currentTrackId, currentTime } = get();
+    const { queue, currentTrackId, currentTime, isShuffleEnabled } = get();
 
     if (currentTime > 3) {
       set((state) => ({
@@ -97,12 +110,21 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
 
     if (!queue.length || !currentTrackId) return;
 
-    const currentIndex = queue.findIndex(
-      (track) => track.id === currentTrackId,
-    );
-    if (currentIndex <= 0) return;
+    const currentIndex = queue.findIndex((track) => track.id === currentTrackId);
+    if (currentIndex === -1) return;
 
-    const previousTrack = queue[currentIndex - 1];
+    let previousTrack: QueueTrack | undefined;
+
+    if (isShuffleEnabled && queue.length > 1) {
+      const candidates = queue.filter((track) => track.id !== currentTrackId);
+      previousTrack = candidates[Math.floor(Math.random() * candidates.length)];
+    } else {
+      if (currentIndex <= 0) return;
+      previousTrack = queue[currentIndex - 1];
+    }
+
+    if (!previousTrack) return;
+
     const nextState = await resolveTrackPlayback(previousTrack);
     set(() => nextState);
   },
@@ -152,6 +174,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
       };
     }),
 
+
   reset: () =>
     set({
       queue: [],
@@ -162,6 +185,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
       duration: 0,
       currentTime: 0,
       isPlaying: false,
+      isShuffleEnabled: false,
       volume: 1,
       previousVolume: 1,
     }),
